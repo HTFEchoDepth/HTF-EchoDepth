@@ -72,7 +72,9 @@ Metric definitions and aggregation details are described in [`docs/METRIC_PROTOC
 
 ## Training and model fusion
 
-BV2 training follows the paper recipe with validation-based checkpoint selection and final model fusion. Training saves validation-selected candidate checkpoints, and MG-WSF constructs the final fused model from these candidates.
+Training follows the paper configuration. The paper is **coming soon**.
+
+This repository provides training and MG-WSF entry points:
 
 ```bash
 python scripts/train_bv2.py \
@@ -80,11 +82,7 @@ python scripts/train_bv2.py \
   --data-root "${HTF_BV2_DATA_ROOT}" \
   --index-dir data/bv2_index \
   --output-dir outputs/bv2_run
-```
 
-Then construct the final fused checkpoint:
-
-```bash
 python scripts/run_mg_wsf_bv2.py \
   --config configs/bv2/mg_wsf_bv2.yaml \
   --data-root "${HTF_BV2_DATA_ROOT}" \
@@ -94,17 +92,7 @@ python scripts/run_mg_wsf_bv2.py \
   --save-fused-checkpoint
 ```
 
-Finally evaluate the fused checkpoint:
-
-```bash
-python scripts/eval_bv2.py \
-  --config configs/bv2/eval_htf_echodepth_bv2.yaml \
-  --data-root "${HTF_BV2_DATA_ROOT}" \
-  --index-file data/bv2_index/test_index.csv \
-  --checkpoint outputs/bv2_run/fused/htf_echodepth_mg_wsf_fused.pth
-```
-
-More details are available in [`docs/TRAINING_RECIPE.md`](docs/TRAINING_RECIPE.md) and [`docs/RESULTS_REPRODUCTION.md`](docs/RESULTS_REPRODUCTION.md). Additional datasets or experimental extensions may be supported in future updates.
+More details are available in [`docs/TRAINING_RECIPE.md`](docs/TRAINING_RECIPE.md).
 
 ## Citation
 
