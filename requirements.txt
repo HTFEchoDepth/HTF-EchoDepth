@@ -1,5 +1,5 @@
-# HTF-EchoDepth — minimal runtime deps (Phase 2 placeholder)
-# Pin versions in Phase 3 after code extraction and smoke tests.
+# HTF-EchoDepth minimal runtime dependencies.
+# See docs/ENVIRONMENT.md for the reference verification environment.
 
 torch>=2.0
 torchaudio>=2.0

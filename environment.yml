@@ -1,5 +1,5 @@
-# HTF-EchoDepth — conda environment skeleton (Phase 2 placeholder)
-# Full pinned environment will be finalized in Phase 3.
+# HTF-EchoDepth conda environment entry point.
+# See docs/ENVIRONMENT.md for the reference verification environment.
 
 name: htf-echodepth
 channels:

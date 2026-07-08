@@ -4,15 +4,15 @@
 
 > **Paper status:** Under review. Citation will be updated after publication.
 
-This repository provides the official implementation of **HTF-EchoDepth**, a framework for dense depth estimation from binaural echoes. HTF-EchoDepth encodes echo spectrograms through hierarchical time-frequency feature modeling and uses validation-guided weight-space fusion to construct the final single checkpoint.
-
 ## Overview
+
+This repository provides the official implementation of **HTF-EchoDepth**, a framework for dense depth estimation from binaural echoes. HTF-EchoDepth treats echo spectrograms as structured time–frequency observations and organizes their representations through hierarchical feature encoding at local, stage, and latent levels. It further uses validation-guided weight-space fusion to improve the final model while preserving single-model inference.
 
 ![HTF-EchoDepth overview](assets/figures/framework.png)
 
-## Main Results on BV2
+## Main results on BV2
 
-We evaluate HTF-EchoDepth on the **BatVision V2 (BV2)** test split under the valid-depth protocol (`gt >= 0.5 m`, `max_depth = 30 m`, `N = 584`). Baseline rows are reported results from prior work, and HTF-EchoDepth is our evaluated result after model fusion.
+We evaluate HTF-EchoDepth on the **BatVision V2 (BV2)** test split using the paper evaluation setting. Baseline rows are reported results from prior work, and HTF-EchoDepth is our evaluated result after model fusion.
 
 | Method | RMSE ↓ | REL ↓ | log10 ↓ | δ1 ↑ | δ2 ↑ | δ3 ↑ |
 |--------|-------:|------:|--------:|-----:|-----:|-----:|
@@ -22,13 +22,7 @@ We evaluate HTF-EchoDepth on the **BatVision V2 (BV2)** test split under the val
 | **HTF-EchoDepth** *(ours)* | **2.187** | **0.382** | **0.154** | **0.516** | **0.724** | **0.840** |
 
 Also see [`results/paper_results_bv2.csv`](results/paper_results_bv2.csv). Exact reproduction is recommended using the released pretrained checkpoint.
-
-## Highlights
-
-- **Echo-based dense depth estimation:** predict dense scene geometry from binaural echoes.
-- **Hierarchical time-frequency encoding:** model echo spectrograms at local, stage, and latent levels.
-- **Single-checkpoint model fusion:** construct the final model through validation-guided weight-space fusion.
-- **BV2-focused release:** provide data tools, training, evaluation, and model-fusion scripts for the main paper experiments.
+Metric definitions and the BV2 evaluation protocol are described in [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md).
 
 ## Installation
 
@@ -51,31 +45,6 @@ Please download the dataset from the official sources and follow their license a
 - Project page: [Audio-Visual BatVision Dataset](https://amandinebtto.github.io/Batvision-Dataset/)
 - Official GitHub: [AmandineBtto/Batvision-Dataset](https://github.com/AmandineBtto/Batvision-Dataset)
 - Paper: *The Audio-Visual BatVision Dataset for Research on Sight and Sound*, IROS 2023
-
-After preparing BV2, set the data root:
-
-```bash
-export HTF_BV2_DATA_ROOT=/path/to/bv2_processed
-```
-
-Build portable index CSVs:
-
-```bash
-python scripts/build_bv2_index.py \
-  --raw-root "${HTF_BV2_DATA_ROOT}" \
-  --out-dir data/bv2_index
-```
-
-Validate several samples:
-
-```bash
-python scripts/validate_bv2_data.py \
-  --data-root "${HTF_BV2_DATA_ROOT}" \
-  --index-file data/bv2_index/test_index.csv \
-  --num-samples 3
-```
-
-Expected echo shape: **2 x 256 x 256**. Depth maps are stored as `.npy` `uint16` values in millimeters and are converted to meters in the dataloader.
 
 More details are provided in [`docs/DATA.md`](docs/DATA.md).
 
@@ -100,18 +69,11 @@ python scripts/eval_bv2.py \
   --output-dir outputs/eval_bv2
 ```
 
-Metric definitions and the valid-depth protocol are described in [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md). Checkpoint usage is described in [`docs/CHECKPOINTS.md`](docs/CHECKPOINTS.md).
+Metric definitions and the BV2 evaluation protocol are described in [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md). Checkpoint usage is described in [`docs/CHECKPOINTS.md`](docs/CHECKPOINTS.md).
 
-## Training and Model Fusion
+## Training and model fusion
 
-BV2 training follows the paper recipe: 80 epochs, AdamW, validation-based checkpoint selection, and final model fusion.
-
-During training, the script:
-
-- logs validation metrics for each epoch;
-- saves metric-role candidate checkpoints when validation metrics improve;
-- writes `candidate_registry.csv`, a portable record of validation-selected candidates;
-- enables MG-WSF to construct the final fused checkpoint after training.
+BV2 training follows the paper recipe with validation-based checkpoint selection and final model fusion. Training saves validation-selected candidate checkpoints, and MG-WSF constructs the final fused model from these candidates.
 
 ```bash
 python scripts/train_bv2.py \
@@ -143,33 +105,7 @@ python scripts/eval_bv2.py \
   --checkpoint outputs/bv2_run/fused/htf_echodepth_mg_wsf_fused.pth
 ```
 
-MG-WSF uses validation data for donor selection and fusion-weight search. The test set is used only for final reporting. More details are available in [`docs/TRAINING_RECIPE.md`](docs/TRAINING_RECIPE.md) and [`docs/RESULTS_REPRODUCTION.md`](docs/RESULTS_REPRODUCTION.md).
-
-## Repository Structure
-
-```text
-configs/bv2/       Paper-style BV2 configs
-htf_echodepth/     Model, data, losses, metrics, and fusion code
-scripts/           Data indexing, validation, training, evaluation, and fusion scripts
-docs/              Data, metric, checkpoint, and reproduction notes
-results/           BV2 reference results used in the paper
-assets/figures/    Overview figure used by this README
-```
-
-## Reproduction Notes
-
-| Goal | Recommended path |
-|------|------------------|
-| Reproduce Table 1 | Released pretrained checkpoint + [`docs/RESULTS_REPRODUCTION.md`](docs/RESULTS_REPRODUCTION.md) |
-| Train and fuse from scratch | [`docs/TRAINING_RECIPE.md`](docs/TRAINING_RECIPE.md) |
-| Check metric definitions | [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md) |
-| Match paper and code names | [`docs/NAMING_MAP.md`](docs/NAMING_MAP.md) |
-
-Training from scratch may show small numerical variations due to stochasticity and tie-breaking. This release focuses on the BV2 implementation used in the main paper experiments. Additional datasets or experimental extensions may be supported in future updates.
-
-## License
-
-See [`LICENSE`](LICENSE).
+More details are available in [`docs/TRAINING_RECIPE.md`](docs/TRAINING_RECIPE.md) and [`docs/RESULTS_REPRODUCTION.md`](docs/RESULTS_REPRODUCTION.md). Additional datasets or experimental extensions may be supported in future updates.
 
 ## Citation
 
@@ -195,3 +131,5 @@ Please also cite the BatVision Dataset paper when using BV2:
   year      = {2023}
 }
 ```
+
+See [`LICENSE`](LICENSE) for licensing information.
