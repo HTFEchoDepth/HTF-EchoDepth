@@ -1,18 +1,16 @@
-# Data Format & Acquisition (BV2)
+# Data
 
-This document describes the **BatVision V2 (BV2)** data layout for HTF-EchoDepth. **Dataset files are not stored in the GitHub repository.**
+This release uses **BatVision V2 (BV2)** from the **Audio-Visual BatVision Dataset**. We thank the BatVision Dataset authors for releasing the dataset and enabling research on real-world echo-based scene understanding.
 
-> This release focuses on the BV2 implementation used in the main paper experiments. Additional datasets or extensions (e.g. Replica support) may be released in future updates.
+Official resources:
 
----
+- Project page: [Audio-Visual BatVision Dataset](https://amandinebtto.github.io/Batvision-Dataset/)
+- Official GitHub: [AmandineBtto/Batvision-Dataset](https://github.com/AmandineBtto/Batvision-Dataset)
+- Paper: *The Audio-Visual BatVision Dataset for Research on Sight and Sound*, IROS 2023
 
-## Official data source
+Please follow the dataset license and citation requirements from the official BatVision Dataset release.
 
-| Dataset | Origin |
-|---------|--------|
-| **BatVision V2 (BV2)** | [Audio-Visual BatVision Dataset](https://github.com/AmandineBouche/Audio-Visual-BatVision) |
-
-Obtain processed or official data under the upstream license. This repository documents the **layout expected by our BV2 dataloader** and provides scripts to build portable indices and validate samples.
+This document describes the **BV2** data layout expected by HTF-EchoDepth. **Dataset files are not stored in the GitHub repository.** This repository provides scripts to build portable indices and validate samples.
 
 ---
 

@@ -1,66 +1,64 @@
 # HTF-EchoDepth
 
-**Hierarchical Time-Frequency Echo Depth Estimation with Metric-Guided Weight-Space Fusion**
+**Hierarchical Time-Frequency Feature Encoding for Dense Depth Estimation from Binaural Echoes**
 
-> **Paper status:** Under review. Citation placeholder below — update when the paper is published.
+> **Paper status:** Under review. Citation will be updated after publication.
 
-Official open-source release of **HTF-EchoDepth** for **BatVision V2 (BV2)** — the implementation used in our main paper experiments.
-
----
+This repository provides the official implementation of **HTF-EchoDepth**, a framework for dense depth estimation from binaural echoes. HTF-EchoDepth encodes echo spectrograms through hierarchical time-frequency feature modeling and uses validation-guided weight-space fusion to construct the final single checkpoint.
 
 ## Overview
 
-HTF-EchoDepth estimates dense depth maps from **binaural echoes** using a hierarchical time–frequency encoder–decoder. The network combines local time–frequency encoding (**LTFE**), intra-stage multi-scale residual enhancement (**IMRE**), and latent dual-path encoding (**LDPE**) within a U-Net-style backbone. After training, **metric-guided weight-space fusion (MG-WSF)** combines validation-selected checkpoints into a single model for final test reporting.
-
 ![HTF-EchoDepth overview](assets/figures/framework.png)
 
-**This release focuses on the BV2 implementation used in the main paper experiments.** Spectrograms are computed **on the fly** from `.wav` files in the dataloader (runtime STFT). **Checkpoints are not stored in Git.** Exact Table 1 reproduction is recommended using **released pretrained checkpoints**; training code is provided, but stochastic training may lead to small numerical variations. Internal diagnostic scripts and exploratory branches are **not** included. Experimental extensions such as BiMamba, and additional datasets such as Replica support, may be released in future updates.
+## Main Results on BV2
 
----
+We evaluate HTF-EchoDepth on the **BatVision V2 (BV2)** test split under the valid-depth protocol (`gt >= 0.5 m`, `max_depth = 30 m`, `N = 584`). Baseline rows are reported results from prior work, and HTF-EchoDepth is our evaluated result after model fusion.
 
-## Repository scope
+| Method | RMSE ↓ | REL ↓ | log10 ↓ | δ1 ↑ | δ2 ↑ | δ3 ↑ |
+|--------|-------:|------:|--------:|-----:|-----:|-----:|
+| Echo-Net *(reported)* | 2.878 | 0.521 | 0.197 | 0.430 | 0.629 | 0.765 |
+| Bat-Net *(reported)* | 2.676 | 0.432 | 0.160 | 0.497 | 0.717 | 0.835 |
+| AHMF-Net *(reported)* | 2.195 | 0.430 | 0.074 | 0.502 | 0.718 | 0.838 |
+| **HTF-EchoDepth** *(ours)* | **2.187** | **0.382** | **0.154** | **0.516** | **0.724** | **0.840** |
 
-| Included | Not in this release (may come in future updates) |
-|----------|--------------------------------------------------|
-| BV2 data tools, dataloader, runtime STFT | Other datasets (e.g. Replica) |
-| HTF-EchoDepth model + paper configs | Experimental extensions (e.g. BiMamba) |
-| Train / eval / MG-WSF scripts | Exploratory branches |
-| Reference BV2 results (`results/`) | Dataset or checkpoint binaries |
+Also see [`results/paper_results_bv2.csv`](results/paper_results_bv2.csv). Exact reproduction is recommended using the released pretrained checkpoint.
 
-```
-configs/bv2/       Paper-style BV2 configs
-htf_echodepth/     Model, data, loss, metrics, fusion
-scripts/           Train, eval, MG-WSF, index/validate tools
-docs/              Data, metrics, checkpoints, recipes
-results/           Published BV2 reference numbers
-assets/figures/    Overview figure (upload separately)
-```
+## Highlights
 
----
+- **Echo-based dense depth estimation:** predict dense scene geometry from binaural echoes.
+- **Hierarchical time-frequency encoding:** model echo spectrograms at local, stage, and latent levels.
+- **Single-checkpoint model fusion:** construct the final model through validation-guided weight-space fusion.
+- **BV2-focused release:** provide data tools, training, evaluation, and model-fusion scripts for the main paper experiments.
 
-## Installation / environment
+## Installation
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/AIMHIGH-WU/HTF-EchoDepth.git
 cd HTF-EchoDepth
+
 pip install -r requirements.txt
 export PYTHONPATH="$(pwd):${PYTHONPATH:-}"
-
-export HTF_BV2_DATA_ROOT=/path/to/bv2_processed
-export HTF_CHECKPOINT_ROOT=/path/to/checkpoints
 ```
 
-Conda users: see `environment.yml`.  
-Reference stack used in our local verification: [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md).
+Conda users may also refer to [`environment.yml`](environment.yml). The reference environment used in our local verification is summarized in [`docs/ENVIRONMENT.md`](docs/ENVIRONMENT.md).
 
----
+## Data
 
-## BV2 data preparation
+This project uses **BatVision V2 (BV2)** from the **Audio-Visual BatVision Dataset**. We thank the BatVision Dataset authors for releasing the dataset and enabling research on real-world echo-based scene understanding.
 
-Dataset files are **not** hosted in this repository.
+Please download the dataset from the official sources and follow their license and citation requirements:
 
-1. Obtain **BatVision V2** processed data (see [docs/DATA.md](docs/DATA.md)).
-2. Build portable index CSVs (relative paths only):
+- Project page: [Audio-Visual BatVision Dataset](https://amandinebtto.github.io/Batvision-Dataset/)
+- Official GitHub: [AmandineBtto/Batvision-Dataset](https://github.com/AmandineBtto/Batvision-Dataset)
+- Paper: *The Audio-Visual BatVision Dataset for Research on Sight and Sound*, IROS 2023
+
+After preparing BV2, set the data root:
+
+```bash
+export HTF_BV2_DATA_ROOT=/path/to/bv2_processed
+```
+
+Build portable index CSVs:
 
 ```bash
 python scripts/build_bv2_index.py \
@@ -68,7 +66,7 @@ python scripts/build_bv2_index.py \
   --out-dir data/bv2_index
 ```
 
-3. Validate a few samples:
+Validate several samples:
 
 ```bash
 python scripts/validate_bv2_data.py \
@@ -77,28 +75,21 @@ python scripts/validate_bv2_data.py \
   --num-samples 3
 ```
 
-Expected echo shape: **2 × 256 × 256**. Depth maps: `.npy` uint16 mm → meters in the loader.
+Expected echo shape: **2 x 256 x 256**. Depth maps are stored as `.npy` `uint16` values in millimeters and are converted to meters in the dataloader.
 
----
+More details are provided in [`docs/DATA.md`](docs/DATA.md).
 
-## Pretrained checkpoints
+## Evaluation
 
-**Checkpoints are not committed to Git.** Place released weights under:
+Pretrained checkpoints are released separately and should be placed under:
 
-```
+```text
 checkpoints/
 ├── htf_echodepth_bv2_before_mgwsf.pth
 └── htf_echodepth_bv2_mgwsf.pth
 ```
 
-Release policy: available upon request / released separately — see [docs/CHECKPOINTS.md](docs/CHECKPOINTS.md).  
-Paper checkpoint compatibility is handled automatically by `htf_echodepth.models.compatibility`.
-
----
-
-## Evaluation
-
-Test-split evaluation uses the **valid-depth protocol** (`valid_min_depth = 0.5 m`, `max_depth = 30 m`). See [docs/METRIC_PROTOCOL.md](docs/METRIC_PROTOCOL.md).
+Evaluate the fused checkpoint on the BV2 test split:
 
 ```bash
 python scripts/eval_bv2.py \
@@ -109,29 +100,30 @@ python scripts/eval_bv2.py \
   --output-dir outputs/eval_bv2
 ```
 
-Or: `bash scripts/eval_bv2.sh --help`
+Metric definitions and the valid-depth protocol are described in [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md). Checkpoint usage is described in [`docs/CHECKPOINTS.md`](docs/CHECKPOINTS.md).
 
----
+## Training and Model Fusion
 
-## Training and model fusion
+BV2 training follows the paper recipe: 80 epochs, AdamW, validation-based checkpoint selection, and final model fusion.
 
-BV2 training follows the paper recipe (80 epochs, AdamW, validation-based checkpoint selection). During training the script:
+During training, the script:
 
-1. Logs **validation metrics** each epoch (`val_metrics.csv`).
-2. Saves **metric-role candidate checkpoints** when validation improves (`best_rmse.pth`, `best_rel.pth`, `best_log10.pth`, `best_delta1.pth`, `best_delta2.pth`, `best_delta3.pth`, `best_wbrs.pth`).
-3. Writes **`candidate_registry.csv`** — a portable record of candidates and their validation scores (no test-set selection).
-
-After training, **MG-WSF** reads `candidate_registry.csv`, applies **MRCR** (metric-role retention) and **VGFS** (validation-guided weight search) on the **validation split**, then performs **weight-space fusion** to produce a **single fused checkpoint**.
+- logs validation metrics for each epoch;
+- saves metric-role candidate checkpoints when validation metrics improve;
+- writes `candidate_registry.csv`, a portable record of validation-selected candidates;
+- enables MG-WSF to construct the final fused checkpoint after training.
 
 ```bash
-# 1. Train (paper-style config)
 python scripts/train_bv2.py \
   --config configs/bv2/train_htf_echodepth_bv2.yaml \
   --data-root "${HTF_BV2_DATA_ROOT}" \
   --index-dir data/bv2_index \
   --output-dir outputs/bv2_run
+```
 
-# 2. Fuse validation-selected donors → single checkpoint
+Then construct the final fused checkpoint:
+
+```bash
 python scripts/run_mg_wsf_bv2.py \
   --config configs/bv2/mg_wsf_bv2.yaml \
   --data-root "${HTF_BV2_DATA_ROOT}" \
@@ -139,8 +131,11 @@ python scripts/run_mg_wsf_bv2.py \
   --candidate-registry outputs/bv2_run/candidate_registry.csv \
   --output-dir outputs/bv2_run/fused \
   --save-fused-checkpoint
+```
 
-# 3. Evaluate fused model on test split (final reporting only)
+Finally evaluate the fused checkpoint:
+
+```bash
 python scripts/eval_bv2.py \
   --config configs/bv2/eval_htf_echodepth_bv2.yaml \
   --data-root "${HTF_BV2_DATA_ROOT}" \
@@ -148,58 +143,55 @@ python scripts/eval_bv2.py \
   --checkpoint outputs/bv2_run/fused/htf_echodepth_mg_wsf_fused.pth
 ```
 
-**Notes:**
+MG-WSF uses validation data for donor selection and fusion-weight search. The test set is used only for final reporting. More details are available in [`docs/TRAINING_RECIPE.md`](docs/TRAINING_RECIPE.md) and [`docs/RESULTS_REPRODUCTION.md`](docs/RESULTS_REPRODUCTION.md).
 
-- MG-WSF uses **validation only** for donor selection and fusion weights; the **test set is for final reporting**.
-- Meaningful fusion requires **≥ 2 distinct validation-selected donors** from training.
-- `--allow-degenerate-fusion` is for **smoke/debug runs only** (single donor copy-through) — **not** performance evidence.
+## Repository Structure
 
-Full workflows: [docs/RESULTS_REPRODUCTION.md](docs/RESULTS_REPRODUCTION.md) · Recipe details: [docs/TRAINING_RECIPE.md](docs/TRAINING_RECIPE.md)
+```text
+configs/bv2/       Paper-style BV2 configs
+htf_echodepth/     Model, data, losses, metrics, and fusion code
+scripts/           Data indexing, validation, training, evaluation, and fusion scripts
+docs/              Data, metric, checkpoint, and reproduction notes
+results/           BV2 reference results used in the paper
+assets/figures/    Overview figure used by this README
+```
 
----
-
-## Expected BV2 results (Table 1)
-
-BV2 test split (**N = 584**), valid-depth protocol (gt ≥ 0.5 m). Baseline rows are **reported results from prior work**. **HTF-EchoDepth** is our evaluated result (after MG-WSF). For exact reproduction, use the released pretrained checkpoint.
-
-| Method | RMSE ↓ | REL ↓ | log10 ↓ | δ1 ↑ | δ2 ↑ | δ3 ↑ |
-|--------|-------:|------:|--------:|-----:|-----:|-----:|
-| Echo-Net *(reported)* | 2.878 | 0.521 | 0.197 | 0.430 | 0.629 | 0.765 |
-| Bat-Net *(reported)* | 2.676 | 0.432 | 0.160 | 0.497 | 0.717 | 0.835 |
-| AHMF-Net *(reported)* | 2.195 | 0.430 | 0.074 | 0.502 | 0.718 | 0.838 |
-| **HTF-EchoDepth** *(ours)* | **2.187** | **0.382** | **0.154** | **0.516** | **0.724** | **0.840** |
-
-Also see [`results/paper_results_bv2.csv`](results/paper_results_bv2.csv).
-
----
-
-## Reproduction notes
+## Reproduction Notes
 
 | Goal | Recommended path |
 |------|------------------|
-| Match Table 1 numbers | Released pretrained checkpoint + [RESULTS_REPRODUCTION.md](docs/RESULTS_REPRODUCTION.md) workflow A |
-| Retrain + fuse from scratch | Workflow B in [RESULTS_REPRODUCTION.md](docs/RESULTS_REPRODUCTION.md) |
-| Metric definitions | [METRIC_PROTOCOL.md](docs/METRIC_PROTOCOL.md) |
-| Paper ↔ code naming | [NAMING_MAP.md](docs/NAMING_MAP.md) |
+| Reproduce Table 1 | Released pretrained checkpoint + [`docs/RESULTS_REPRODUCTION.md`](docs/RESULTS_REPRODUCTION.md) |
+| Train and fuse from scratch | [`docs/TRAINING_RECIPE.md`](docs/TRAINING_RECIPE.md) |
+| Check metric definitions | [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md) |
+| Match paper and code names | [`docs/NAMING_MAP.md`](docs/NAMING_MAP.md) |
 
-Training from scratch may show small drift vs published CSV due to stochasticity and tie-breaking.
-
----
+Training from scratch may show small numerical variations due to stochasticity and tie-breaking. This release focuses on the BV2 implementation used in the main paper experiments. Additional datasets or experimental extensions may be supported in future updates.
 
 ## License
 
-See [LICENSE](LICENSE).
-
----
+See [`LICENSE`](LICENSE).
 
 ## Citation
+
+If you find this repository useful, please cite our paper after publication.
 
 ```bibtex
 % TODO: replace with final paper citation when available
 @article{htf_echodepth2026,
-  title   = {HTF-EchoDepth: Hierarchical Time-Frequency Echo Depth Estimation with Metric-Guided Weight-Space Fusion},
+  title   = {HTF-EchoDepth: Hierarchical Time-Frequency Feature Encoding for Dense Depth Estimation from Binaural Echoes},
   author  = {...},
   journal = {...},
   year    = {2026}
+}
+```
+
+Please also cite the BatVision Dataset paper when using BV2:
+
+```bibtex
+@inproceedings{brunetto2023batvision,
+  title     = {The Audio-Visual BatVision Dataset for Research on Sight and Sound},
+  author    = {Brunetto, Amandine and Hornauer, Sascha and Yu, Stella X. and Moutarde, Fabien},
+  booktitle = {2023 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  year      = {2023}
 }
 ```
