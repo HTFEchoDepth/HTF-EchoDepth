@@ -1,6 +1,6 @@
 # Checkpoints (BV2)
 
-Pretrained BV2 checkpoints are distributed separately and should be placed in a local checkpoint directory.
+Pretrained BV2 checkpoints will be released soon. After download, place them under a local `checkpoints/` directory.
 
 ---
 
@@ -9,8 +9,8 @@ Pretrained BV2 checkpoints are distributed separately and should be placed in a 
 | Item | Policy |
 |------|--------|
 | Storage | Local checkpoint directory |
-| Distribution | Released separately / available upon request |
-| Request | Open an issue if the download link is unavailable |
+| Distribution | Coming soon |
+| Updates | Download links will be added when available |
 
 ---
 

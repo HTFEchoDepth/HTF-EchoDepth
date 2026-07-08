@@ -49,7 +49,7 @@ More details are provided in [`docs/DATA.md`](docs/DATA.md).
 
 ## Evaluation
 
-Pretrained checkpoints are released separately and should be placed under:
+Pretrained checkpoints will be released soon and should be placed under:
 
 ```text
 checkpoints/
