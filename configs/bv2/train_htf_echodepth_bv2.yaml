@@ -1,0 +1,15 @@
+# HTF-EchoDepth BV2 training configuration.
+# Full training details will be released soon.
+
+experiment_name: htf_echodepth_bv2
+release_status: coming_soon
+
+model:
+  name: HTF-EchoDepth
+
+dataset:
+  name: bv2
+  index_dir: data/bv2_index
+
+training:
+  output_dir: outputs/bv2_run

@@ -40,10 +40,12 @@ Training candidate logging: `htf_echodepth/fusion/candidate_manager.py`
 
 ---
 
-## BV2 config
+## BV2 configs
 
 ```
+configs/bv2/train_htf_echodepth_bv2.yaml
 configs/bv2/eval_htf_echodepth_bv2.yaml
+configs/bv2/mg_wsf_bv2.yaml
 ```
 
 ---

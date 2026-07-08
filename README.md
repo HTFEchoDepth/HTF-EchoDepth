@@ -62,6 +62,30 @@ python scripts/eval_bv2.py \
 
 Metric definitions and aggregation details are described in [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md). Checkpoint loading is described in [`docs/CHECKPOINTS.md`](docs/CHECKPOINTS.md).
 
+## Training and model fusion
+
+Training and MG-WSF follow the paper configuration. The paper is **coming soon**.
+
+This repository keeps the public entry points for the training workflow:
+
+```bash
+python scripts/train_bv2.py \
+  --config configs/bv2/train_htf_echodepth_bv2.yaml \
+  --data-root "${HTF_BV2_DATA_ROOT}" \
+  --index-dir data/bv2_index \
+  --output-dir outputs/bv2_run
+
+python scripts/run_mg_wsf_bv2.py \
+  --config configs/bv2/mg_wsf_bv2.yaml \
+  --data-root "${HTF_BV2_DATA_ROOT}" \
+  --index-dir data/bv2_index \
+  --candidate-registry outputs/bv2_run/candidate_registry.csv \
+  --output-dir outputs/bv2_run/fused \
+  --save-fused-checkpoint
+```
+
+More details are provided in [`docs/TRAINING_RECIPE.md`](docs/TRAINING_RECIPE.md).
+
 ## Citation
 
 If you find this repository useful, please cite our paper after publication.

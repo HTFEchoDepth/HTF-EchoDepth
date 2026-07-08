@@ -1,0 +1,9 @@
+# HTF-EchoDepth BV2 MG-WSF configuration.
+# Full model-fusion details will be released soon.
+
+experiment_name: htf_echodepth_bv2_mg_wsf
+release_status: coming_soon
+
+fusion:
+  method: MG-WSF
+  output_dir: outputs/bv2_run/fused

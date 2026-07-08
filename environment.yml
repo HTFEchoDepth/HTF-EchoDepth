@@ -1,13 +1,24 @@
-# HTF-EchoDepth conda environment entry point.
-# See docs/ENVIRONMENT.md for the reference verification environment.
-
 name: htf-echodepth
+
 channels:
-  - pytorch
   - conda-forge
   - defaults
+
 dependencies:
   - python=3.10
   - pip
+  - numpy>=1.23
+  - pandas>=1.5
+  - scipy>=1.10
+  - pillow>=9.0
+  - matplotlib>=3.7
+  - tqdm>=4.65
+  - pyyaml>=6.0
   - pip:
-      - -r requirements.txt
+      - torch>=2.0
+      - torchaudio>=2.0
+      - torchvision>=0.15
+      - soundfile>=0.12
+      - librosa>=0.10
+      - omegaconf>=2.3
+      - hydra-core>=1.3
