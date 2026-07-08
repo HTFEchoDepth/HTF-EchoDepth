@@ -1,0 +1,45 @@
+# Data and artifacts (never commit) — top-level only
+/data/
+/datasets/
+/checkpoints/
+/outputs/
+/logs/
+
+# Large binary / model files
+*.pth
+*.pt
+*.npz
+*.npy
+*.pkl
+*.tar
+*.tar.gz
+*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.env
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Hydra / experiment outputs
+multirun/
+.hydra/
+wandb/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Internal release assembly audits (not for public repo)
+_release_audit/

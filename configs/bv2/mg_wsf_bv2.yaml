@@ -1,0 +1,45 @@
+# BV2 MG-WSF config — validation-guided weight-space fusion
+experiment_name: htf_echodepth_bv2_mg_wsf
+
+model:
+  name: HTF-EchoDepth
+  depth_normalize: true
+
+dataset:
+  name: bv2
+  max_depth_m: 30.0
+  valid_min_depth_m: 0.5
+  image_size: 256
+  val_index: indices/val_index.csv
+  test_index: indices/test_index.csv
+
+fusion:
+  method: MG-WSF
+  mrcr:
+    enabled: true
+  vgfs:
+    enabled: true
+    primary_metric: WBRS
+    grid_step: 0.05
+  output_checkpoint: outputs/bv2/fusion/htf_echodepth_mg_wsf_fused.pth
+
+metrics:
+  protocol: valid_depth
+  valid_min_depth_m: 0.5
+  max_depth_m: 30.0
+
+wbrs:
+  reference_metrics:
+    RMSE: 2.413
+    REL: 0.466
+    LOG10: 0.190
+    DELTA1: 0.444
+    DELTA2: 0.646
+    DELTA3: 0.771
+
+evaluation:
+  final_report_split: test
+
+donor_checkpoints:
+  # Populate with validation-recorded donor paths after training
+  paths: []

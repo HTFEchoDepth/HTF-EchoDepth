@@ -1,0 +1,13 @@
+# HTF-EchoDepth — conda environment skeleton (Phase 2 placeholder)
+# Full pinned environment will be finalized in Phase 3.
+
+name: htf-echodepth
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - -r requirements.txt

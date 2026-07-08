@@ -1,0 +1,12 @@
+table,method,rmse,rel,log10,delta1,delta2,delta3,result_type,notes
+Table 1,Echo-Net,2.878,0.521,0.197,0.430,0.629,0.765,reported,Reference result from prior literature; not re-evaluated in this repository
+Table 1,Bat-Net,2.676,0.432,0.179,0.489,,0.809,reported,Reference result from BatVision IROS 2023; protocol may differ from HTF eval
+Table 1,AHMF-Net,2.183,0.367,,0.511,,0.846,reported,Reference result from prior literature
+Table 1,HTF-EchoDepth,2.187,0.382,0.154,0.516,0.724,0.840,ours,After MG-WSF; test split N=584; valid depth >= 0.5 m
+Table 2,Base U-Net,2.413,0.466,0.190,0.444,0.646,0.771,ours,Ablation arm
+Table 2,Base + LTFE,2.239,0.393,0.163,0.486,0.701,0.826,ours,Ablation arm
+Table 2,Base + IMRE,2.253,0.436,0.158,0.505,0.718,0.830,ours,Ablation arm
+Table 2,Base + LDPE,2.328,0.411,0.169,0.481,0.690,0.816,ours,Ablation arm
+Table 2,Full HTF-EchoDepth (before fusion),2.194,0.382,0.155,0.511,0.721,0.839,ours,Before MG-WSF
+Table 4,HTF-EchoDepth (before fusion),2.194,0.382,0.155,0.511,0.721,0.839,ours,BV2 MG-WSF ablation before row
+Table 4,HTF-EchoDepth (after MG-WSF),2.187,0.382,0.154,0.516,0.724,0.840,ours,BV2 MG-WSF ablation after row

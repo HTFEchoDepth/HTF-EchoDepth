@@ -1,0 +1,28 @@
+# BV2 evaluation config for HTF-EchoDepth
+experiment_name: htf_echodepth_bv2_eval
+
+model:
+  name: HTF-EchoDepth
+  input_channels: 2
+  output_channels: 1
+  depth_normalize: true
+
+dataset:
+  name: bv2
+  max_depth_m: 30.0
+  valid_min_depth_m: 0.5
+  image_size: 256
+  eval_index: indices/test_index.csv
+
+evaluation:
+  split: test
+  batch_size: 1
+  num_workers: 4
+
+metrics:
+  protocol: valid_depth
+  valid_min_depth_m: 0.5
+  max_depth_m: 30.0
+
+checkpoint:
+  path: null  # set via CLI --checkpoint
