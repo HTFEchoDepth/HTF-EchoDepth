@@ -1,6 +1,6 @@
 # Checkpoints (BV2)
 
-Pretrained BV2 checkpoints are **not stored in this Git repository** and must remain **outside Git tracking**.
+Pretrained BV2 checkpoints are distributed separately and should be placed in a local checkpoint directory.
 
 ---
 
@@ -8,7 +8,7 @@ Pretrained BV2 checkpoints are **not stored in this Git repository** and must re
 
 | Item | Policy |
 |------|--------|
-| Git storage | **No** `.pth` / `.pt` files in the repo |
+| Storage | Local checkpoint directory |
 | Distribution | Released separately / available upon request |
 | Request | Open an issue if the download link is unavailable |
 
@@ -24,7 +24,7 @@ checkpoints/
 └── htf_echodepth_bv2_mgwsf.pth          # final fused model (Table 1)
 ```
 
-Optional training bundle may also include metric-role donor checkpoints and a fusion recipe JSON — not required if you use the pre-fused release file.
+Optional training bundles may also include metric-role donor checkpoints and a fusion recipe JSON. The pre-fused release file is sufficient for Table 1 evaluation.
 
 ---
 
@@ -62,7 +62,7 @@ See [RESULTS_REPRODUCTION.md](RESULTS_REPRODUCTION.md) for the full workflow.
 
 | Goal | Recommendation |
 |------|----------------|
-| **Exact Table 1 reproduction** | Use **released pretrained checkpoints** |
+| **Table 1 evaluation** | Use **released pretrained checkpoints** |
 | Research / ablation retrain | Supported; expect small numerical variation |
 
 Published reference values: [`results/paper_results_bv2.csv`](../results/paper_results_bv2.csv)

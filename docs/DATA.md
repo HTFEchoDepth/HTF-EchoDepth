@@ -10,13 +10,13 @@ Official resources:
 
 Please follow the dataset license and citation requirements from the official BatVision Dataset release.
 
-This document describes the **BV2** data layout expected by HTF-EchoDepth. **Dataset files are not stored in the GitHub repository.** This repository provides scripts to build portable indices and validate samples.
+This document describes the **BV2** data layout expected by HTF-EchoDepth. Dataset files are distributed through the official BatVision Dataset resources. This repository provides scripts to build portable indices and validate samples.
 
 ---
 
 ## Design principle: raw WAV + runtime STFT
 
-- **Echo is stored as binaural `.wav`** — not precomputed spectrograms.
+- **Echo format:** binaural `.wav`; spectrograms are computed at load time.
 - **STFT is computed at runtime** in `htf_echodepth.data.BV2Dataset` on every load.
 - STFT parameters are fixed in `htf_echodepth/data/bv2_dataset.py` (paper training path).
 
@@ -41,7 +41,7 @@ ${HTF_BV2_DATA_ROOT}/
     └── dataset_manifest.json
 ```
 
-### Split sizes (paper protocol)
+### Split sizes
 
 | Split | Samples |
 |-------|--------:|
@@ -52,13 +52,13 @@ ${HTF_BV2_DATA_ROOT}/
 ### Depth on disk
 
 - Format: **NumPy `.npy`**, **uint16**, values in **millimeters**
-- Loader: `meters = npy / 1000`, clip at `max_depth = 30 m`, optional normalize for model input
+- Loader: converts depth values from millimeters to meters and prepares model targets.
 
 ### Runtime STFT
 
 | Parameter | Value |
 |-----------|-------|
-| Truncation | `(2 × max_depth / 340) × sample_rate` |
+| Truncation | Paper range setting with the audio sample rate |
 | `n_fft` | 512 |
 | `win_length` | 64 |
 | `hop_length` | 16 |
@@ -70,7 +70,7 @@ ${HTF_BV2_DATA_ROOT}/
 
 ## Build index
 
-Creates CSV indices with **relative paths only** (no data copied):
+Creates CSV indices with relative paths and leaves source data in place:
 
 ```bash
 python scripts/build_bv2_index.py \
@@ -97,12 +97,6 @@ Checks: wav readable, runtime STFT runs, echo shape **2×256×256**, depth npy l
 
 ---
 
-## Valid-depth evaluation protocol
-
-Metric masking and aggregation are defined in [METRIC_PROTOCOL.md](METRIC_PROTOCOL.md) (`valid_min_depth = 0.5 m`, `max_depth = 30 m`).
-
----
-
 ## Load in Python
 
 ```python
@@ -111,8 +105,6 @@ from htf_echodepth.data import BV2Dataset
 ds = BV2Dataset(
     data_root="${HTF_BV2_DATA_ROOT}",
     index_file="data/bv2_index/test_index.csv",
-    max_depth_m=30.0,
-    valid_min_depth_m=0.5,
 )
 sample = ds[0]
 assert sample["echo_spectrogram"].shape == (2, 256, 256)
@@ -136,11 +128,4 @@ assert sample["depth"].shape == (1, 256, 256)
 | `scripts/build_bv2_index.py` | Per-scene CSV → unified relative index CSVs |
 | `scripts/validate_bv2_data.py` | Check files + dataloader output shapes |
 
----
-
-## What is NOT in Git
-
-- Processed dataset files (`.wav`, `.npy`)
-- Pretrained checkpoints (`.pth`)
-
-See [CHECKPOINTS.md](CHECKPOINTS.md).
+Evaluation metrics and aggregation are described in [METRIC_PROTOCOL.md](METRIC_PROTOCOL.md). Checkpoint usage is described in [CHECKPOINTS.md](CHECKPOINTS.md).

@@ -17,12 +17,11 @@ We evaluate HTF-EchoDepth on the **BatVision V2 (BV2)** test split using the pap
 | Method | RMSE ↓ | REL ↓ | log10 ↓ | δ1 ↑ | δ2 ↑ | δ3 ↑ |
 |--------|-------:|------:|--------:|-----:|-----:|-----:|
 | Echo-Net *(reported)* | 2.878 | 0.521 | 0.197 | 0.430 | 0.629 | 0.765 |
-| Bat-Net *(reported)* | 2.676 | 0.432 | 0.160 | 0.497 | 0.717 | 0.835 |
-| AHMF-Net *(reported)* | 2.195 | 0.430 | 0.074 | 0.502 | 0.718 | 0.838 |
+| [Bat-Net](https://github.com/SaschaHornauer/Batvision) *(reported)* | 2.676 | 0.432 | 0.160 | 0.497 | 0.717 | 0.835 |
+| [AHMF-Net](https://dl.acm.org/doi/10.1145/3736768) *(reported)* | 2.195 | 0.430 | 0.074 | 0.502 | 0.718 | 0.838 |
 | **HTF-EchoDepth** *(ours)* | **2.187** | **0.382** | **0.154** | **0.516** | **0.724** | **0.840** |
 
-Also see [`results/paper_results_bv2.csv`](results/paper_results_bv2.csv). Exact reproduction is recommended using the released pretrained checkpoint.
-Metric definitions and the BV2 evaluation protocol are described in [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md).
+Also see [`results/paper_results_bv2.csv`](results/paper_results_bv2.csv). Metric definitions and aggregation details are provided in [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md).
 
 ## Installation
 
@@ -69,7 +68,7 @@ python scripts/eval_bv2.py \
   --output-dir outputs/eval_bv2
 ```
 
-Metric definitions and the BV2 evaluation protocol are described in [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md). Checkpoint usage is described in [`docs/CHECKPOINTS.md`](docs/CHECKPOINTS.md).
+Metric definitions and aggregation details are described in [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md). Checkpoint usage is described in [`docs/CHECKPOINTS.md`](docs/CHECKPOINTS.md).
 
 ## Training and model fusion
 

@@ -41,6 +41,6 @@ Conda alternative: `environment.yml`
 
 ---
 
-## CPU-only note
+## CPU execution
 
-Scripts fall back to CPU when CUDA is unavailable. Full BV2 training is intended for GPU.
+Scripts can run on CPU when CUDA is unavailable. Full BV2 training is intended for GPU.

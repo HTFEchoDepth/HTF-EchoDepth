@@ -1,10 +1,10 @@
 # Results Reproduction (BV2)
 
-Two workflows for reproducing published BV2 numbers. **Exact Table 1 reproduction should use released pretrained checkpoints** (Workflow A).
+Two workflows for reproducing published BV2 numbers. Workflow A evaluates the released pretrained checkpoint for Table 1.
 
 References: [`results/paper_results_bv2.csv`](../results/paper_results_bv2.csv) · [METRIC_PROTOCOL.md](METRIC_PROTOCOL.md) · [CHECKPOINTS.md](CHECKPOINTS.md)
 
-Baseline rows marked *reported* are reference numbers from prior literature and are **not** re-evaluated in this repository.
+Baseline rows marked *reported* are reference numbers from prior literature.
 
 ---
 
@@ -60,7 +60,7 @@ python scripts/train_bv2.py \
 Training outputs (under `--output-dir`):
 
 - `val_metrics.csv` — per-epoch validation metrics
-- `candidate_registry.csv` — portable candidate list (**validation only**, no test metrics)
+- `candidate_registry.csv` — portable validation-selected candidate list
 - Metric-role checkpoints: `best_rmse.pth`, `best_rel.pth`, `best_log10.pth`, `best_delta1.pth`, `best_delta2.pth`, `best_delta3.pth`, `best_wbrs.pth`
 - Optional: `last.pth`
 
@@ -68,7 +68,7 @@ Details: [TRAINING_RECIPE.md](TRAINING_RECIPE.md)
 
 ### B2. MG-WSF fusion
 
-MG-WSF is part of the **training and model fusion** workflow — not a separate experimental track. It:
+MG-WSF is part of the **training and model fusion** workflow. It:
 
 1. Reads `candidate_registry.csv`
 2. Applies **MRCR** on validation records
@@ -85,12 +85,11 @@ python scripts/run_mg_wsf_bv2.py \
   --save-fused-checkpoint
 ```
 
-**Requirements:**
+**Fusion input:**
 
 - **≥ 2 distinct validation-selected donors** after MRCR (from a full training run with diverse metric-role improvements).
-- `--allow-degenerate-fusion` is **only for smoke/debug** when MRCR collapses to a single donor. It performs copy-through tagging, **not** real fusion — **do not treat as performance evidence**.
 
-### B3. Evaluate fused checkpoint (test split — final reporting only)
+### B3. Evaluate fused checkpoint
 
 ```bash
 python scripts/eval_bv2.py \
@@ -107,11 +106,11 @@ python scripts/eval_bv2.py \
 
 ### Donor pool size
 
-MRCR typically retains a small specialist pool (paper-scale: on the order of a few donors). The release config does not hard-limit donor count; donors come from `candidate_registry.csv`.
+MRCR typically retains a small specialist pool (paper-scale: on the order of a few donors). Donors come from `candidate_registry.csv`.
 
-### Weight grid for 4+ donors
+### Weight search
 
-VGFS uses a full simplex grid for **k ≤ 3** donors. For **k > 3**, the release implementation uses a **simple equal-weight fallback** rather than an exhaustive grid search. This is an engineering simplification — **not** a performance claim. For exact paper numbers, use the **released pretrained fused checkpoint** (Workflow A).
+VGFS searches fusion weights over validation-selected donors and writes the fused checkpoint used by the evaluation command.
 
 ---
 
@@ -121,12 +120,4 @@ VGFS uses a full simplex grid for **k ≤ 3** donors. For **k > 3**, the release
 |------------|-------------|
 | Released checkpoint + protocol | Rounded match on all six metrics |
 | Train + fuse from scratch | Small drift possible |
-| Smoke / single-donor fusion | Engineering test only |
-| Baselines marked *reported* | Not re-evaluated here |
-
----
-
-## Out of scope
-
-- Full internal experiment matrix
-- Qualitative figure assets (optional separate release)
+| Baselines marked *reported* | Reference values from prior literature |

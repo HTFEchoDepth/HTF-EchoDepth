@@ -1,6 +1,6 @@
 # Naming Map — Paper ↔ Implementation
 
-Public naming follows **paper terminology**. Normal users should import **`HTFEchoDepth`** and the documented scripts — not low-level backbone modules.
+Public naming follows **paper terminology**. Recommended entry points are **`HTFEchoDepth`** and the documented scripts.
 
 ---
 
@@ -50,9 +50,9 @@ configs/bv2/mg_wsf_bv2.yaml
 
 ---
 
-## Checkpoint compatibility (internal, automatic)
+## Checkpoint compatibility
 
-Released pretrained checkpoints were saved from the research codebase. The public `HTFEchoDepth` class wraps the same architecture. Loading goes through `htf_echodepth.models.compatibility` (e.g. stripping `module.` prefixes) — **end users normally call** `load_checkpoint()` only:
+Released pretrained checkpoints were saved from the research codebase. The public `HTFEchoDepth` class wraps the same architecture. Loading goes through `htf_echodepth.models.compatibility` (e.g. stripping `module.` prefixes), with `load_checkpoint()` as the recommended helper:
 
 ```python
 from htf_echodepth.models import build_htf_echodepth
@@ -64,6 +64,6 @@ load_checkpoint(model, "checkpoints/htf_echodepth_bv2_mgwsf.pth")
 
 ---
 
-## Backbone internals (not public API)
+## Backbone components
 
-Low-level block implementations live under `htf_echodepth/models/backbone/` for **checkpoint fidelity**. These modules exist only to preserve `state_dict` compatibility with released weights. Use the public API above in application code and documentation.
+Low-level block implementations live under `htf_echodepth/models/backbone/` for **checkpoint fidelity** and `state_dict` compatibility with released weights. Use the public API above in application code and documentation.

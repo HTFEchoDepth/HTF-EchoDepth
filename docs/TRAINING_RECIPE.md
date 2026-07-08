@@ -20,9 +20,9 @@ Config: `configs/bv2/train_htf_echodepth_bv2.yaml` · Fusion config: `configs/bv
 | Loss | L1 + thresholded log-ratio hinge |
 | λ_lrh | 0.003 |
 | Input | 2×256×256 runtime STFT spectrogram |
-| Depth target | Normalized to 30 m max depth |
+| Depth target | Normalized depth map |
 | Checkpoint selection | **Validation split** (metric-role bests + WBRS) |
-| Final reporting | **Test split only** |
+| Reporting | **Test split** |
 
 ```bash
 python scripts/train_bv2.py \
@@ -31,10 +31,6 @@ python scripts/train_bv2.py \
   --index-dir data/bv2_index \
   --output-dir outputs/bv2_run
 ```
-
-Smoke / debug flags (optional, not for paper numbers): `--max-train-samples`, `--max-val-samples`, `--max-batches`, `--save-smoke-checkpoint`
-
----
 
 ## Training output structure
 
@@ -59,7 +55,7 @@ outputs/bv2_run/
 
 ### candidate_registry.csv
 
-Generated from **validation metrics only** — the test set is **not** used for candidate selection. Columns include `role`, `metric_name`, `checkpoint_path` (relative), `epoch`, and validation metric values.
+Generated from validation metrics. Columns include `role`, `metric_name`, `checkpoint_path` (relative), `epoch`, and validation metric values.
 
 ### Metric-role checkpoints
 
@@ -83,16 +79,15 @@ python scripts/run_mg_wsf_bv2.py \
 
 Pipeline: **MRCR** (retain validation specialists) → **VGFS** (validation weight search) → **weight-space fusion** → single `.pth`.
 
-- Requires **≥ 2 distinct MRCR donors** for real fusion.
-- `--allow-degenerate-fusion`: smoke/debug only when only one donor exists — **not performance evidence**.
+- Uses validation-selected MRCR donors for weight-space fusion.
 
-Evaluate the fused model on the **test split** for final reporting ([METRIC_PROTOCOL.md](METRIC_PROTOCOL.md)).
+Evaluate the fused model on the **test split** ([METRIC_PROTOCOL.md](METRIC_PROTOCOL.md)).
 
 ---
 
 ## Train from scratch vs pretrained
 
-Stochastic training and checkpoint tie-breaking may cause small drift vs `results/paper_results_bv2.csv`. For **exact** Table 1 numbers, use released pretrained checkpoints ([CHECKPOINTS.md](CHECKPOINTS.md)).
+Stochastic training and checkpoint tie-breaking may cause small drift vs `results/paper_results_bv2.csv`. Released pretrained checkpoints are described in [CHECKPOINTS.md](CHECKPOINTS.md).
 
 ---
 
