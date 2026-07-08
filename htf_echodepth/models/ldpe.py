@@ -1,5 +1,9 @@
-"""LDPE — Latent Dual-Path Encoding."""
+"""LDPE public placeholder."""
 
-from htf_echodepth.models.backbone.dual_path_lite_v0 import DualPathLiteV0
+
+class DualPathLiteV0:
+    def __init__(self, *_args, **_kwargs):
+        raise NotImplementedError("LDPE implementation will be released soon.")
+
 
 __all__ = ["DualPathLiteV0"]

@@ -1,5 +1,9 @@
-"""IMRE — Intra-stage Multi-scale Residual Enhancement."""
+"""IMRE public placeholder."""
 
-from htf_echodepth.models.backbone.res_tfc_tdf_unet5_v1_aligned_imaf_v0 import IMAFStageEnhancement
+
+class IMAFStageEnhancement:
+    def __init__(self, *_args, **_kwargs):
+        raise NotImplementedError("IMRE implementation will be released soon.")
+
 
 __all__ = ["IMAFStageEnhancement"]

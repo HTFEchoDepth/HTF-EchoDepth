@@ -1,1 +1,4 @@
-"""Internal backbone implementation (checkpoint-compatible). Not part of the public API."""
+"""Backbone implementation placeholders.
+
+Full HTF-EchoDepth backbone code will be released soon.
+"""

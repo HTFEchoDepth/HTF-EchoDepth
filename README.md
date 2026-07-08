@@ -64,7 +64,7 @@ Metric definitions and aggregation details are described in [`docs/METRIC_PROTOC
 
 ## Training and model fusion
 
-Training and MG-WSF follow the paper configuration. The paper is **coming soon**.
+Training and MG-WSF follow the configuration used for the reported results. The manuscript is currently under review, and the citation will be updated after publication.
 
 This repository keeps the public entry points for the training workflow:
 

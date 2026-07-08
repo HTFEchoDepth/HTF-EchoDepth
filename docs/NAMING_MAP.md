@@ -52,7 +52,7 @@ configs/bv2/mg_wsf_bv2.yaml
 
 ## Checkpoint compatibility
 
-The public `HTFEchoDepth` class wraps the released architecture. Checkpoint loading goes through `htf_echodepth.models.compatibility` (e.g. stripping `module.` prefixes), with `load_checkpoint()` as the recommended helper:
+Checkpoint loading goes through `htf_echodepth.models.compatibility` (e.g. stripping `module.` prefixes), with `load_checkpoint()` as the recommended helper:
 
 ```python
 from htf_echodepth.models import build_htf_echodepth
@@ -66,4 +66,4 @@ load_checkpoint(model, "checkpoints/checkpoint.pth")
 
 ## Backbone components
 
-Low-level block implementations live under `htf_echodepth/models/backbone/` for **checkpoint fidelity** and `state_dict` compatibility with released weights. Use the public API above in application code and documentation.
+Full backbone implementation details will be released soon. Use the public API above in application code and documentation.

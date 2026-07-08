@@ -1,5 +1,12 @@
-"""U-Net-style encoder–decoder backbone for HTF-EchoDepth."""
+"""Backbone public placeholders for HTF-EchoDepth."""
 
-from htf_echodepth.models.backbone.res_tfc_tdf_unet5_v0 import Downsample, Upsample
+
+class _ReleaseSoon:
+    def __init__(self, *_args, **_kwargs):
+        raise NotImplementedError("Backbone implementation will be released soon.")
+
+
+Downsample = _ReleaseSoon
+Upsample = _ReleaseSoon
 
 __all__ = ["Downsample", "Upsample"]

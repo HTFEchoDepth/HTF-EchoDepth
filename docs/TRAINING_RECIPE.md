@@ -1,6 +1,6 @@
 # Training and Model Fusion
 
-Training and MG-WSF follow the paper configuration. The paper is **coming soon**.
+Training and MG-WSF follow the configuration used for the reported results. The manuscript is currently under review, and the citation will be updated after publication.
 
 The public entry points are kept for consistency with the project workflow:
 
