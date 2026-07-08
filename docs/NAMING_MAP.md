@@ -27,7 +27,7 @@ U-Net encoder–decoder helpers: `htf_echodepth/models/unet_backbone.py`
 
 ---
 
-## Training & fusion (paper-facing)
+## Fusion components
 
 | Term | Full name | Module |
 |------|-----------|--------|
@@ -40,26 +40,24 @@ Training candidate logging: `htf_echodepth/fusion/candidate_manager.py`
 
 ---
 
-## BV2 configs
+## BV2 config
 
 ```
-configs/bv2/train_htf_echodepth_bv2.yaml
 configs/bv2/eval_htf_echodepth_bv2.yaml
-configs/bv2/mg_wsf_bv2.yaml
 ```
 
 ---
 
 ## Checkpoint compatibility
 
-Released pretrained checkpoints were saved from the research codebase. The public `HTFEchoDepth` class wraps the same architecture. Loading goes through `htf_echodepth.models.compatibility` (e.g. stripping `module.` prefixes), with `load_checkpoint()` as the recommended helper:
+The public `HTFEchoDepth` class wraps the released architecture. Checkpoint loading goes through `htf_echodepth.models.compatibility` (e.g. stripping `module.` prefixes), with `load_checkpoint()` as the recommended helper:
 
 ```python
 from htf_echodepth.models import build_htf_echodepth
 from htf_echodepth.utils.checkpoint import load_checkpoint
 
 model = build_htf_echodepth()
-load_checkpoint(model, "checkpoints/htf_echodepth_bv2_mgwsf.pth")
+load_checkpoint(model, "checkpoints/checkpoint.pth")
 ```
 
 ---

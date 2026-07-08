@@ -1,71 +1,45 @@
 # Checkpoints (BV2)
 
-Pretrained BV2 checkpoints will be released soon. After download, place them under a local `checkpoints/` directory.
+Checkpoint loading utilities are provided for local BV2 testing. Place your checkpoint under a local `checkpoints/` directory or pass its path with `--checkpoint`.
 
 ---
 
-## Release policy
+## Local layout
 
-| Item | Policy |
-|------|--------|
-| Storage | Local checkpoint directory |
-| Distribution | Coming soon |
-| Updates | Download links will be added when available |
-
----
-
-## Expected layout
-
-Place downloaded weights under a local directory (example):
+Example:
 
 ```
 checkpoints/
-├── htf_echodepth_bv2_before_mgwsf.pth   # main model before MG-WSF
-└── htf_echodepth_bv2_mgwsf.pth          # final fused model (Table 1)
+└── checkpoint.pth
 ```
-
-Optional training bundles may also include metric-role donor checkpoints and a fusion recipe JSON. The pre-fused release file is sufficient for Table 1 evaluation.
 
 ---
 
 ## Loading & compatibility
 
-Paper checkpoints may use legacy `state_dict` key layouts (e.g. `module.` prefixes). The public API handles this automatically:
+Compatible checkpoints can be loaded through the public helper:
 
 ```python
 from htf_echodepth.models import build_htf_echodepth
 from htf_echodepth.utils.checkpoint import load_checkpoint
 
 model = build_htf_echodepth()
-load_checkpoint(model, "checkpoints/htf_echodepth_bv2_mgwsf.pth")
+load_checkpoint(model, "checkpoints/checkpoint.pth")
 ```
 
 Lower-level helper: `htf_echodepth.models.compatibility.load_model_state`
 
 ---
 
-## Evaluation
+## Testing
 
 ```bash
 python scripts/eval_bv2.py \
   --config configs/bv2/eval_htf_echodepth_bv2.yaml \
   --data-root "${HTF_BV2_DATA_ROOT}" \
   --index-file data/bv2_index/test_index.csv \
-  --checkpoint checkpoints/htf_echodepth_bv2_mgwsf.pth
+  --checkpoint checkpoints/checkpoint.pth
 ```
-
-See [RESULTS_REPRODUCTION.md](RESULTS_REPRODUCTION.md) for the full workflow.
-
----
-
-## Train-from-scratch vs pretrained
-
-| Goal | Recommendation |
-|------|----------------|
-| **Table 1 evaluation** | Use **released pretrained checkpoints** |
-| Research / ablation retrain | Supported; expect small numerical variation |
-
-Published reference values: [`results/paper_results_bv2.csv`](../results/paper_results_bv2.csv)
 
 ---
 
@@ -75,4 +49,4 @@ Published reference values: [`results/paper_results_bv2.csv`](../results/paper_r
 export HTF_CHECKPOINT_ROOT=/path/to/checkpoints
 ```
 
-Then reference `${HTF_CHECKPOINT_ROOT}/htf_echodepth_bv2_mgwsf.pth` in your commands.
+Then reference `${HTF_CHECKPOINT_ROOT}/checkpoint.pth` in your commands.

@@ -128,4 +128,4 @@ assert sample["depth"].shape == (1, 256, 256)
 | `scripts/build_bv2_index.py` | Per-scene CSV → unified relative index CSVs |
 | `scripts/validate_bv2_data.py` | Check files + dataloader output shapes |
 
-Evaluation metrics and aggregation are described in [METRIC_PROTOCOL.md](METRIC_PROTOCOL.md). Checkpoint usage is described in [CHECKPOINTS.md](CHECKPOINTS.md).
+Testing metrics and aggregation are described in [METRIC_PROTOCOL.md](METRIC_PROTOCOL.md). Checkpoint usage is described in [CHECKPOINTS.md](CHECKPOINTS.md).

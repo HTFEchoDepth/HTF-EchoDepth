@@ -1,6 +1,6 @@
 # Metric Protocol (BV2)
 
-Evaluation protocol for **BV2 paper tables**. Training and MG-WSF use the validation split for model and fusion selection; reported numbers are computed on the BV2 test split.
+Metric definitions and aggregation details for BV2 testing.
 
 ---
 
@@ -8,9 +8,9 @@ Evaluation protocol for **BV2 paper tables**. Training and MG-WSF use the valida
 
 | Split | Samples | Use |
 |-------|--------:|-----|
-| train | 1911 | Training |
-| val | 625 | Validation metrics, checkpoint selection, MG-WSF |
-| test | **584** | Reporting |
+| train | 1911 | Development |
+| val | 625 | Validation |
+| test | **584** | Testing |
 
 ---
 
@@ -40,26 +40,13 @@ Six metrics are reported:
 
 For RMSE, REL, and log10, lower values are better. For δ1, δ2, and δ3, higher values are better.
 
-Metrics are computed by the evaluation utilities in `htf_echodepth.metrics` and aggregated over the BV2 test split following the paper setting.
+Metrics are computed by the evaluation utilities in `htf_echodepth.metrics` and aggregated over the BV2 test split.
 
 ---
 
-## MG-WSF rows (Table 4, BV2)
+## Testing checklist
 
-| Stage | Description |
-|-------|-------------|
-| Before fusion | Single best checkpoint |
-| After MG-WSF | Validation-guided fusion of multiple donors |
-
-Both rows are evaluated with the same BV2 paper setting.
-
----
-
-## Reproduction checklist
-
-1. Released pretrained checkpoints ([CHECKPOINTS.md](CHECKPOINTS.md))
+1. Local checkpoint ([CHECKPOINTS.md](CHECKPOINTS.md))
 2. BV2 data + index ([DATA.md](DATA.md))
-3. Test evaluation for final numbers
+3. Testing command from `scripts/eval_bv2.py`
 4. Compare to [`results/paper_results_bv2.csv`](../results/paper_results_bv2.csv)
-
-See [RESULTS_REPRODUCTION.md](RESULTS_REPRODUCTION.md).

@@ -47,52 +47,20 @@ Please download the dataset from the official sources and follow their license a
 
 More details are provided in [`docs/DATA.md`](docs/DATA.md).
 
-## Evaluation
+## Testing code
 
-Pretrained checkpoints will be released soon and should be placed under:
-
-```text
-checkpoints/
-├── htf_echodepth_bv2_before_mgwsf.pth
-└── htf_echodepth_bv2_mgwsf.pth
-```
-
-Evaluate the fused checkpoint on the BV2 test split:
+This repository includes testing utilities for running BV2 metrics with a local checkpoint:
 
 ```bash
 python scripts/eval_bv2.py \
   --config configs/bv2/eval_htf_echodepth_bv2.yaml \
   --data-root "${HTF_BV2_DATA_ROOT}" \
   --index-file data/bv2_index/test_index.csv \
-  --checkpoint checkpoints/htf_echodepth_bv2_mgwsf.pth \
+  --checkpoint /path/to/checkpoint.pth \
   --output-dir outputs/eval_bv2
 ```
 
-Metric definitions and aggregation details are described in [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md). Checkpoint usage is described in [`docs/CHECKPOINTS.md`](docs/CHECKPOINTS.md).
-
-## Training and model fusion
-
-Training follows the paper configuration. The paper is **coming soon**.
-
-This repository provides training and MG-WSF entry points:
-
-```bash
-python scripts/train_bv2.py \
-  --config configs/bv2/train_htf_echodepth_bv2.yaml \
-  --data-root "${HTF_BV2_DATA_ROOT}" \
-  --index-dir data/bv2_index \
-  --output-dir outputs/bv2_run
-
-python scripts/run_mg_wsf_bv2.py \
-  --config configs/bv2/mg_wsf_bv2.yaml \
-  --data-root "${HTF_BV2_DATA_ROOT}" \
-  --index-dir data/bv2_index \
-  --candidate-registry outputs/bv2_run/candidate_registry.csv \
-  --output-dir outputs/bv2_run/fused \
-  --save-fused-checkpoint
-```
-
-More details are available in [`docs/TRAINING_RECIPE.md`](docs/TRAINING_RECIPE.md).
+Metric definitions and aggregation details are described in [`docs/METRIC_PROTOCOL.md`](docs/METRIC_PROTOCOL.md). Checkpoint loading is described in [`docs/CHECKPOINTS.md`](docs/CHECKPOINTS.md).
 
 ## Citation
 
