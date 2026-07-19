@@ -26,7 +26,7 @@ Also see [`results/paper_results_bv2.csv`](results/paper_results_bv2.csv). Metri
 ## Installation
 
 ```bash
-git clone https://github.com/AIMHIGH-WU/HTF-EchoDepth.git
+git clone https://github.com/HTFEchoDepth/HTF-EchoDepth.git
 cd HTF-EchoDepth
 
 pip install -r requirements.txt
