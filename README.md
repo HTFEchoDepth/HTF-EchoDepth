@@ -93,7 +93,7 @@ If you find this repository useful, please cite our paper after publication.
 ```bibtex
 % TODO: replace with final paper citation when available
 @article{htf_echodepth2026,
-  title   = {HTF-EchoDepth: Hierarchical Time-Frequency Feature Encoding for Dense Depth Estimation from Binaural Echoes},
+  title   = {HTF-EchoDepth: Hierarchical Time-Frequency Encoding for Dense Depth Estimation from Binaural Echoes},
   author  = {...},
   journal = {...},
   year    = {2026}
