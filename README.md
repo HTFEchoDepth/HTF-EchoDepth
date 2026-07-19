@@ -1,6 +1,6 @@
 # HTF-EchoDepth
 
-**Hierarchical Time-Frequency Feature Encoding for Dense Depth Estimation from Binaural Echoes**
+**Hierarchical Time-Frequency Encoding for Dense Depth Estimation from Binaural Echoes**
 
 > **Paper status:** Under review. Citation will be updated after publication.
 
